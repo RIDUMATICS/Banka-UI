@@ -1,0 +1,16 @@
+.alert-box {
+  position: fixed;
+  right: 0;
+  top: 80px;
+  width: 100%;
+  z-index: 200;
+  text-align: center;
+  font-weight: 600;
+}
+
+@media (min-width: 992px) {
+  .alert-box {
+    max-width: 500px;
+    width: fit-content;
+  }
+}
