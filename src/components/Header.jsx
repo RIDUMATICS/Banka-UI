@@ -1,4 +1,5 @@
 import react from 'react';
+import { NavLink } from 'react-router-dom';
 import Nav from './Nav';
 
 const Header = () => (
@@ -14,9 +15,9 @@ const Header = () => (
             Get the financial tools and insights to start, build, and grow your
             business.
           </p>
-          <button className="bg-white my-10 text-secondary py-3 px-16 uppercase text-sm shadow-3xl rounded font-semibold">
+          <NavLink to="/signup" className="bg-white my-10 text-secondary py-3 px-16 uppercase text-sm shadow-3xl rounded font-semibold">
             Get started
-          </button>
+          </NavLink>
         </div>
         <div className="h-64 w-full"></div>
       </div>

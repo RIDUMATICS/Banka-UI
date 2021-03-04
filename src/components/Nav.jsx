@@ -39,10 +39,10 @@ const Nav = () => {
               <CustomLink to="/">Home </CustomLink>
             </li>
             <li>
-              <CustomLink to="/about">about</CustomLink>
+              <CustomLink to="/">about</CustomLink>
             </li>
             <li>
-              <CustomLink to="/contact">contact</CustomLink>
+              <CustomLink to="/">contact</CustomLink>
             </li>
           </ul>
           {auth.isAuthenticated === true ? (
@@ -85,22 +85,41 @@ const Nav = () => {
           />
         </span>
         <ul className="my-5">
-          <li className="flex items-center py-4 border-t border-secondary-light text-lg text-secondary ">
-            <RiBankFill className="text-primary mr-4" /> Home
+          <li>
+            <NavLink
+              className="flex items-center py-4 border-t border-secondary-light text-lg text-secondary "
+              to="/"
+            >
+              <RiBankFill className="text-primary mr-4" /> Home
+            </NavLink>
           </li>
-          <li className="flex items-center py-4 border-t border-secondary-light text-lg text-secondary">
-            <RiBankCardFill className="text-primary mr-4" /> About
+          <li>
+            <NavLink
+              className="flex items-center py-4 border-t border-secondary-light text-lg text-secondary"
+              to="/"
+            >
+              <RiBankCardFill className="text-primary mr-4" /> About
+            </NavLink>
           </li>
-          <li className="flex items-center py-4 border-t border-b border-secondary-light text-lg text-secondary">
-            <RiHeadphoneFill className="text-primary mr-4" />
-            Contact
+          <li>
+            <NavLink
+              className="flex items-center py-4 border-t border-b border-secondary-light text-lg text-secondary"
+              to="/"
+            >
+              <RiHeadphoneFill className="text-primary mr-4" />
+              Contact
+            </NavLink>
           </li>
 
-          <li className="uppercase rounded-md border border-primary focus:ring ring-primary text-white text-lg font-semibold bg-primary mt-6 py-3 text-center">
-            Log in
+          <li className="uppercase rounded-md border border-primary focus:ring ring-primary text-white text-lg font-semibold bg-primary mt-6 text-center">
+            <NavLink className="w-full h-full block py-3" to="/login">
+              Log in
+            </NavLink>
           </li>
-          <li className="uppercase rounded-md border border-primary focus:ring ring-primary text-primary text-lg font-semibold bg-white my-4 py-3 text-center">
-            Sign up
+          <li className="uppercase rounded-md border border-primary focus:ring ring-primary text-primary text-lg font-semibold bg-white my-4 text-center">
+            <NavLink className="w-full h-full block py-3" to="/signup">
+              Sign up
+            </NavLink>
           </li>
         </ul>
       </div>
