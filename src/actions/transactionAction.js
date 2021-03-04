@@ -5,7 +5,7 @@ import { showAlert } from './alertAction';
 
 export const getTransactions = (accountNumber) => dispatch => (
   axios
-  .get(`http://localhost:4000/api/v1/accounts/${accountNumber}/transactions`)
+  .get(`/api/v1/accounts/${accountNumber}/transactions`)
   .then((res) => {
     dispatch({
     type: GET_TRANSACTIONS,

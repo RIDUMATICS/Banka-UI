@@ -1,16 +1,12 @@
 import axios from 'axios';
-import _ from 'lodash';
-import { SET_CURRENT_USER, SET_ENABLE2FA, SET_LOADING } from './type';
+import { SET_CURRENT_USER, SET_ENABLE2FA } from './type';
 import setAuthToken from '../utils/setAuthToken';
-import { showAlert } from './alertAction';
+import { errorHandler, showAlert } from './alertAction';
 
 // Register User
 export const registerUser = (data, history) => (dispatch) => {
-  dispatch({
-    type: SET_LOADING,
-  });
   return axios
-    .post('http://localhost:4000/api/v1/auth/signup', data)
+    .post('/api/v1/auth/signup', data)
     .then((res) => {
       const { token, user } = res.data.data;
       // save token and user details to localStorage
@@ -19,54 +15,29 @@ export const registerUser = (data, history) => (dispatch) => {
       // set token to Auth header
       setAuthToken(token);
       dispatch({
-        type: SET_LOADING,
-      });
-      dispatch({
         type: SET_CURRENT_USER,
         payload: user,
       });
+      dispatch(
+        showAlert({
+          message: res.data.message,
+          type: 'alert-success',
+        })
+      );
       return history.push('/dashboard');
     })
     .catch((err) => {
-      let errorResp;
-      if (_.has(err.response, 'data')) {
-        const { error, status } = err.response.data;
-        if (status === 500) {
-          errorResp = 'This is not you, Please try again';
-        } else {
-          errorResp = error;
-        }
-      } else {
-        errorResp = 'This is not you, Please try again';
-      }
-      console.log(err);
-      dispatch({
-        type: SET_LOADING,
-      });
-      return dispatch(
-        showAlert({
-          component: 'signUp',
-          message: errorResp,
-          type: 'alert-danger',
-        })
-      );
+      dispatch(errorHandler(err));
     });
 };
 
 // Login User
 export const loginUser = (data, history) => (dispatch) => {
-  dispatch({
-    type: SET_LOADING,
-  });
   return axios
-    .post('http://localhost:4000/api/v1/auth/signin', data)
+    .post('/api/v1/auth/signin', data)
     .then((res) => {
       const { token, user } = res.data.data;
       dispatch(setCurrentUser({ user, token }));
-
-      dispatch({
-        type: SET_LOADING,
-      });
 
       if (user.enable2FA) {
         dispatch({
@@ -84,27 +55,7 @@ export const loginUser = (data, history) => (dispatch) => {
       }
     })
     .catch((err) => {
-      let errorResp;
-      if (_.has(err.response, 'data')) {
-        const { error, status } = err.response.data;
-        if (status === 500) {
-          errorResp = 'This is not you, Please try again';
-        } else {
-          errorResp = error;
-        }
-      } else {
-        errorResp = 'This is not you, Please try again';
-      }
-      dispatch({
-        type: SET_LOADING,
-      });
-      return dispatch(
-        showAlert({
-          component: 'logIn',
-          message: errorResp,
-          type: 'alert-danger',
-        })
-      );
+      dispatch(errorHandler(err));
     });
 };
 
@@ -114,17 +65,10 @@ export const disable2FA = () => ({
 });
 
 export const verifyToken = (data, history) => (dispatch) => {
-  dispatch({
-    type: SET_LOADING,
-  });
   axios
-    .post('http://localhost:4000/api/v1/auth/2fa', data)
+    .post('/api/v1/auth/2fa', data)
     .then((res) => {
       const { token, user } = res.data.data;
-
-      dispatch({
-        type: SET_LOADING,
-      });
 
       // save token and user details to localStorage
       localStorage.setItem('jwtToken', token);
@@ -143,16 +87,8 @@ export const verifyToken = (data, history) => (dispatch) => {
       return history.push('/dashboard');
     })
     .catch((err) => {
-      dispatch({
-        type: SET_LOADING,
-      });
-
       return dispatch(
-        showAlert({
-          component: 'verifyToken',
-          message: err.response.data.error,
-          type: 'alert-danger',
-        })
+        errorHandler(err)
       );
     });
 };
@@ -173,7 +109,6 @@ export const clearCurrentUser = () => {
 
 // Set logged in user
 export const setCurrentUser = ({ user, token }) => {
-  
   // save token and user details to localStorage
   localStorage.setItem('jwtToken', token);
   localStorage.setItem('user', JSON.stringify(user));
@@ -193,27 +128,34 @@ export const logoutUser = () => (dispatch) => {
 };
 
 export const changePassword = (data) => (dispatch) => {
-  dispatch({
-    type: SET_LOADING,
-  });
   axios
-    .patch('http://localhost:4000/api/v1/auth/update', data)
-    .then((res) => logoutUser())
-    .catch((err) => console.log(err.response));
+    .patch('/api/v1/auth/update', data)
+    .then((res) => {
+      dispatch(
+        showAlert({
+          message: res.data.message,
+          type: 'alert-success',
+        })
+      );
+      dispatch(logoutUser());
+    })
+    .catch((err) => dispatch(errorHandler(err)));
 };
 
 export const updateDetails = (data) => (dispatch) => {
-  dispatch({
-    type: SET_LOADING,
-  });
   axios
-    .patch('http://localhost:4000/api/v1/auth/update', data)
+    .patch('/api/v1/auth/update', data)
     .then((res) => {
-      console.log(res);
+      dispatch(
+        showAlert({
+          message: res.data.message,
+          type: 'alert-success',
+        })
+      );
       dispatch({
         type: SET_CURRENT_USER,
         payload: res.data.data,
       });
     })
-    .catch((err) => console.log(err.response));
+    .catch((err) => dispatch(errorHandler(err)));
 };

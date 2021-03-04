@@ -1,18 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Home from './components/Home';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 import PrivateRoute from './components/PrivateRoute';
-import Profile from './components/Profile';
-import Accounts from './components/Accounts';
-import Transactions from './components/Transactions';
-import AccountsAdmin from './components/AccountsAdmin';
-import AccountDetails from './components/AccountDetails';
-import Setting from './components/setting/Setting';
+import Profile from './pages/Profile';
+import Accounts from './pages/Accounts';
+import Transactions from './pages/Transactions';
+import AccountsAdmin from './pages/AccountsAdmin';
+import AccountDetails from './pages/AccountDetails';
+import Settings from './pages/Settings'
 import Alert from './components/Alert';
 import { useSelector } from 'react-redux';
+import Transfer from './pages/Transfer';
 
 const RootContainer = ({ alert }) => {
   const _alert = useSelector((state) => state.alert);
@@ -25,6 +26,7 @@ const RootContainer = ({ alert }) => {
       <Route path="/signup" exact component={SignUp} />
       <Switch>
         <PrivateRoute path="/dashboard" exact component={Profile} />
+        <PrivateRoute path="/dashboard/transfer" exact component={Transfer} />
         <PrivateRoute
           path="/dashboard/accounts/user"
           exact
@@ -44,11 +46,10 @@ const RootContainer = ({ alert }) => {
           path="/dashboard/transactions/:transactionId"
           component={Transactions}
         />
-        <PrivateRoute path="/settings" component={Setting} />
+        <PrivateRoute path="/dashboard/settings" component={Settings} />
       </Switch>
     </Router>
   );
-  
-}
+};
 
 export default RootContainer;
